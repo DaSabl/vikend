@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="starwars.js">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Star Wars likovi</h1>
+        <form id="character-form">
+        <label for="character-name">Unesite ime lika:</label>
+        <input type="text" id="character-name" name="character-name">
+        <button type="submit">Dohvati lika</button>
+   </form>
+    <div id="character-info"></div>
+
+    <script>
+        $(document).ready(function(){
+    $("#character-form").submit(function(event){
+        event.preventDefault();
+        var imeLika = $("character-name").val();
+        var url = "https://swapi.dev/api/people/?search=" + imeLika;
+        $.ajax({
+            url: url,
+            dataType: "json",
+            type:"GET",
+            success: function(data){
+                if(data.results.length > 0){
+                    var lik = data.results[0];
+                    // prikaži ime , godina, spol...
+                    var likInfo = "<h1>" + lik.name + "</h1>";
+                    linkInfo += "<p>" + lik.birth_year + "</p>";
+                    linkInfo += "<p>" + lik.gender + "</p>";
+                    linkInfo += "<p>" + lik.hair_color + "</p>";
+                    linkInfo += "<p>" + lik.eye_color + "</p>";
+                    $("character-info").html(likInfo);
+           
+                }
+                else{
+                    $("character-info").html("<p>Podaci o liku nisu pronađeni</p>")
+                }
+
+            },
+            error:function(){
+                $("character-info").html("<p>Podaci nisu dohvaćeni. Molimo pokušajte kasnije!</p>")
+            }
+        });
+    });
+});
+    </script>
+</body>
+</html>
